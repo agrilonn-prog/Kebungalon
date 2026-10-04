@@ -1233,6 +1233,15 @@ html[data-theme=dark] .sm-ctx{background:#1F3A28;}
 @media (max-width:340px){.tool-tab-row,.market-tab-row{grid-template-columns:repeat(2,1fr);}}
 .market-tab{border:none;background:var(--paper);box-shadow:var(--shadow);border-radius:14px;color:var(--ink);padding:10px 6px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit;}
 .market-tab.active{background:var(--grad);color:#fff;box-shadow:0 6px 16px rgba(47,143,78,.32);}
+
+/* ===== Tab alat: ikon saja ===== */
+.tool-tab-row.icon-only{grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:8px;}
+.tool-tab-row.icon-only .tool-tab{min-height:52px;padding:0;border-radius:16px;}
+.tool-tab .ti{font-size:24px;line-height:1;}
+.tool-cap{text-align:center;font-weight:800;font-size:14px;color:var(--green-deep);margin:0 0 14px;
+  background:var(--green-pale);border-radius:99px;padding:8px 14px;width:fit-content;margin-left:auto;margin-right:auto;}
+.tool-cap span{margin-right:4px;}
+@media (max-width:340px){.tool-tab-row.icon-only{grid-template-columns:repeat(4,1fr);}}
 </style>
 <script>if("serviceWorker"in navigator){navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(x){x.unregister()})}).catch(function(){});if(window.caches)caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})});}</script></head>
 <body>
@@ -10549,6 +10558,24 @@ wrapAllTables(document);
   $('tqGo').onclick=()=>ask($('tqQ').value);
   $('tqQ').addEventListener('keydown',e=>{if(e.key==='Enter')ask($('tqQ').value)});
   box.querySelectorAll('.tq-chips button').forEach(b=>b.onclick=()=>ask(b.textContent));
+})();
+</script>
+<script>/* Tab alat: tampil ikon saja (praktis), nama tab aktif tampil di bawahnya. */
+(function(){
+  const row=document.querySelector('.tool-tab-row');if(!row)return;
+  const tabs=[...row.querySelectorAll('.tool-tab')];
+  tabs.forEach(b=>{
+    const t=b.textContent.trim(),i=t.indexOf(' ');
+    const ic=i>0?t.slice(0,i):t,lb=i>0?t.slice(i+1):t;
+    b.innerHTML=`<span class="ti">${ic}</span>`;
+    b.title=lb;b.setAttribute('aria-label',lb);b.dataset.lb=lb;b.dataset.ic=ic;
+  });
+  row.classList.add('icon-only');
+  const cap=document.createElement('div');cap.className='tool-cap';row.after(cap);
+  const upd=()=>{const a=tabs.find(b=>b.classList.contains('active'))||tabs[0];
+    cap.innerHTML=`<span>${a.dataset.ic}</span> ${a.dataset.lb}`;};
+  new MutationObserver(upd).observe(row,{attributes:true,subtree:true,attributeFilter:['class']});
+  upd();
 })();
 </script>
 
