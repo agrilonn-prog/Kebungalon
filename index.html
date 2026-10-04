@@ -1288,7 +1288,12 @@ html[data-theme=dark] .sheet-illust,html[data-theme=dark] .sheet .cat{background
 @media (max-width:380px){.sm-pick button{margin-left:auto;}.ak-grid{gap:6px;}.ak-q{font-size:10.5px;}}
 html[data-theme=dark] .sm select{background-color:#0F1D14;}
 </style>
-<script>if("serviceWorker"in navigator){navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(x){x.unregister()})}).catch(function(){});if(window.caches)caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})});}</script></head>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kebun Galon">
+<meta name="application-name" content="Kebun Galon">
+</head>
 <body>
 <div class="app">
 
@@ -10633,6 +10638,91 @@ window.addEventListener('load',function(){setTimeout(function(){
   d.setAttribute('style','position:fixed;left:0;right:0;top:0;z-index:99999;background:#B3261E;color:#fff;font:14px/1.5 system-ui,sans-serif;padding:12px 16px');
   d.innerHTML='<b>File tampilan belum termuat.</b> Folder <code>css/</code>, <code>js/</code>, dan <code>assets/</code> belum ter-upload ke GitHub. Upload semuanya (atau pakai versi satu-file index.html), lalu muat ulang dengan Ctrl+Shift+R.';
   document.body.appendChild(d);},600);});
+</script>
+<script>/* ===== PWA & PUSAT CERDAS: instal asli, offline, lencana ikon, cadangan data, suara, deep-link ===== */
+(function(){
+  const $=id=>document.getElementById(id), T=m=>{try{showToast(m)}catch(e){}};
+  const st=document.createElement('style');st.textContent=`
+  .pq-bar{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));max-width:496px;margin:auto;z-index:9997;background:var(--green-deep);color:#fff;border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:center;box-shadow:var(--shadow);font-size:14px}
+  .pq-bar button{margin-left:auto;border:none;border-radius:10px;padding:8px 12px;font-weight:700;background:#fff;color:#28401F;cursor:pointer}
+  .pq-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9998;display:none;align-items:flex-end;justify-content:center}.pq-ov.show{display:flex}
+  .pq-sh{background:var(--paper);color:var(--ink);width:100%;max-width:520px;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+  .pq-sh h3{margin:0 0 4px}.pq-sh small{color:var(--ink-soft)}.pq-row{display:flex;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.pq-row b{margin-left:auto}
+  .pq-sh button.pq-b{width:100%;margin-top:10px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--green-pale);color:var(--ink);font-weight:700;cursor:pointer}
+  .pq-mic{border:none;background:var(--green-pale);border-radius:10px;padding:0 12px;cursor:pointer;font-size:16px}.pq-mic.on{background:var(--orange-pale)}`;
+  document.head.appendChild(st);
+
+  /* 1) Service worker + banner pembaruan + status offline */
+  function bar(txt,btn,fn){const d=document.createElement('div');d.className='pq-bar';d.innerHTML='<span>'+txt+'</span><button>'+btn+'</button>';d.querySelector('button').onclick=()=>{d.remove();fn()};document.body.appendChild(d)}
+  if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+    const had=!!navigator.serviceWorker.controller;let rl=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!rl){rl=true;location.reload()}});
+    navigator.serviceWorker.register('./sw.js').then(reg=>{
+      const ask=w=>bar('🌱 Versi baru Kebun Galon tersedia','Perbarui',()=>w.postMessage({type:'SKIP_WAITING'}));
+      if(reg.waiting&&had)ask(reg.waiting);
+      reg.addEventListener('updatefound',()=>{const w=reg.installing;w&&w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)ask(w)})});
+      setInterval(()=>reg.update().catch(()=>{}),36e5);
+    }).catch(()=>{});
+  }
+  addEventListener('offline',()=>T('Kamu offline — semua data tetap tersimpan di HP 📴'));
+  addEventListener('online',()=>T('Kembali online ✅'));
+  try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+
+  /* 2) Lencana ikon aplikasi = jumlah tugas rawat yang belum dicentang */
+  function badge(){try{const n=computeSmartTasks().filter(t=>!taskDoneLog[t.id]).length;
+    if(navigator.setAppBadge)(n?navigator.setAppBadge(n):navigator.clearAppBadge()).catch(()=>{})}catch(e){}}
+  if(typeof window.renderReminders==='function'){const o=window.renderReminders;window.renderReminders=function(){const r=o.apply(this,arguments);badge();return r}}
+  document.addEventListener('visibilitychange',badge);setInterval(badge,6e4);setTimeout(badge,1200);
+
+  /* 3) Pintasan ikon (?view=jurnal) */
+  const v=new URLSearchParams(location.search).get('view');
+  if(v)setTimeout(()=>{try{switchView(v)}catch(e){}},400);
+
+  /* 4) Tanya Kebun dengan suara (Bahasa Indonesia) */
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,q=$('tqQ'),go=$('tqGo');
+  if(SR&&q&&go){const b=document.createElement('button');b.className='pq-mic';b.textContent='🎤';b.setAttribute('aria-label','Tanya dengan suara');
+    go.parentNode.insertBefore(b,go);
+    b.onclick=()=>{const r=new SR();r.lang='id-ID';r.interimResults=false;b.classList.add('on');
+      r.onresult=e=>{q.value=e.results[0][0].transcript;go.click()};
+      r.onend=r.onerror=()=>b.classList.remove('on');try{r.start()}catch(e){b.classList.remove('on')}}}
+
+  /* 5) Pusat Cerdas: status, cadangan & pulihkan data */
+  const ov=document.createElement('div');ov.className='pq-ov';document.body.appendChild(ov);
+  ov.onclick=e=>{if(e.target===ov)ov.classList.remove('show')};
+  const inst=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  async function panel(){
+    const last=+localStorage.getItem('kbg_last_backup')||0;
+    const per=navigator.storage&&navigator.storage.persisted?await navigator.storage.persisted():false;
+    const ctrl=!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
+    let mb='';try{const e=await navigator.storage.estimate();mb=(e.usage/1048576).toFixed(1)+' MB'}catch(e){}
+    ov.innerHTML=`<div class="pq-sh"><h3>⚙️ Pusat Cerdas</h3><small>Datamu hanya tersimpan di perangkat ini — cadangkan secara berkala.</small>
+    <div class="pq-row">📲 Aplikasi terinstal<b>${inst()?'Ya ✓':'Belum'}</b></div>
+    <div class="pq-row">📴 Siap offline<b>${ctrl?'Ya ✓':'Belum (muat ulang sekali)'}</b></div>
+    <div class="pq-row">🔒 Penyimpanan permanen<b>${per?'Ya ✓':'Tidak dijamin'}</b></div>
+    <div class="pq-row">💾 Cadangan terakhir<b>${last?new Date(last).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'Belum pernah'}</b></div>
+    ${mb?`<div class="pq-row">📦 Ruang terpakai<b>${mb}</b></div>`:''}
+    <button class="pq-b" id="pqB">⬇️ Cadangkan semua data (jurnal, kebun, harga…)</button>
+    <button class="pq-b" id="pqR">⬆️ Pulihkan dari file cadangan</button>
+    <input type="file" id="pqF" accept="application/json,.json" hidden></div>`;
+    ov.classList.add('show');
+    $('pqB').onclick=()=>{const d={app:'kebun-galon',v:1,at:new Date().toISOString(),data:{}};
+      for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);d.data[k]=localStorage.getItem(k)}
+      const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));
+      a.download='kebun-galon-cadangan-'+d.at.slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3e3);
+      localStorage.setItem('kbg_last_backup',String(Date.now()));T('Cadangan diunduh 💾');ov.classList.remove('show')};
+    $('pqR').onclick=()=>$('pqF').click();
+    $('pqF').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+      r.onload=()=>{try{const d=JSON.parse(r.result);if(d.app!=='kebun-galon'||!d.data)throw 0;
+        if(!confirm('Pulihkan '+Object.keys(d.data).length+' data? Data di perangkat ini akan ditimpa.'))return;
+        Object.entries(d.data).forEach(([k,x])=>localStorage.setItem(k,x));T('Data dipulihkan ✅');setTimeout(()=>location.reload(),900)}
+        catch(x){T('File cadangan tidak valid')}};r.readAsText(f)};
+  }
+  const tb=document.querySelector('.topbar');
+  if(tb){const b=document.createElement('button');b.className='tb-btn';b.textContent='⚙️';b.setAttribute('aria-label','Pusat Cerdas');b.onclick=panel;tb.insertBefore(b,$('installBtn'))}
+  /* pengingat cadangan lembut: >14 hari & ada jurnal */
+  setTimeout(()=>{const l=+localStorage.getItem('kbg_last_backup')||0;
+    if(localStorage.getItem('kebunGalon.journal.v1')||localStorage.length>8)if(Date.now()-l>12096e5&&sessionStorage.getItem('pq_n')!=='1'){sessionStorage.setItem('pq_n','1');bar('💾 Sudah lama tidak mencadangkan data kebunmu','Cadangkan',panel)}},6e3);
+})();
 </script>
 </body>
 </html>

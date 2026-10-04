@@ -1,0 +1,92 @@
+{
+ "id": "./",
+ "name": "Kebun Galon — Budidaya & Bisnis Hortikultura",
+ "short_name": "Kebun Galon",
+ "description": "Panduan, jadwal rawat pintar, diagnosa, dan analisa bisnis kebun dari galon bekas. Jalan offline.",
+ "lang": "id",
+ "dir": "ltr",
+ "start_url": "./?source=pwa",
+ "scope": "./",
+ "display": "standalone",
+ "display_override": [
+  "standalone",
+  "minimal-ui"
+ ],
+ "background_color": "#F5F1E6",
+ "theme_color": "#F5F1E6",
+ "categories": [
+  "lifestyle",
+  "productivity",
+  "education"
+ ],
+ "icons": [
+  {
+   "src": "icons/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Jurnal Tanam",
+   "short_name": "Jurnal Tanam",
+   "url": "./?view=jurnal",
+   "icons": [
+    {
+     "src": "icons/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  },
+  {
+   "name": "Rawat & Diagnosa",
+   "short_name": "Rawat & Diagnosa",
+   "url": "./?view=rawat",
+   "icons": [
+    {
+     "src": "icons/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  },
+  {
+   "name": "Kalkulator",
+   "short_name": "Kalkulator",
+   "url": "./?view=kalkulator",
+   "icons": [
+    {
+     "src": "icons/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  },
+  {
+   "name": "Harga Pasar",
+   "short_name": "Harga Pasar",
+   "url": "./?view=pasar",
+   "icons": [
+    {
+     "src": "icons/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  }
+ ]
+}
