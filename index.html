@@ -1242,6 +1242,29 @@ html[data-theme=dark] .sm-ctx{background:#1F3A28;}
   background:var(--green-pale);border-radius:99px;padding:8px 14px;width:fit-content;margin-left:auto;margin-right:auto;}
 .tool-cap span{margin-right:4px;}
 @media (max-width:340px){.tool-tab-row.icon-only{grid-template-columns:repeat(4,1fr);}}
+
+/* ===== Panel detail tanaman: rapi & konsisten dengan tema ===== */
+.sheet-overlay{background:rgba(10,25,15,.5);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.sheet{border-radius:28px 28px 0 0;padding:8px 18px 36px;box-shadow:0 -12px 40px rgba(10,25,15,.28);}
+.sheet-handle{width:44px;height:5px;background:rgba(22,35,26,.18);}
+.sheet h2{font-size:23px;letter-spacing:-.4px;line-height:1.2;padding-right:4px;}
+.sheet .cat{display:inline-block;background:var(--green-pale);color:var(--green-deep);font-weight:700;font-size:11px;
+  padding:3px 10px;border-radius:99px;margin:4px 0 14px;}
+.sheet-illust{width:64px;height:64px;padding:8px;border-radius:20px;background:var(--green-pale);margin:2px 0 8px 10px;}
+.sheet-tab-row{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;clear:both;border-radius:18px;}
+.sheet-tab{white-space:normal;min-height:40px;padding:8px 2px;font-size:11.5px;line-height:1.2;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;text-align:center;}
+.sheet-tab.active{background:var(--grad);box-shadow:0 4px 12px rgba(47,143,78,.35);}
+.analysis-card,.result-box.analysis-card{background:linear-gradient(150deg,#14532D 0%,#1F7A3E 100%);border-radius:22px;
+  box-shadow:0 12px 28px rgba(20,83,45,.28);border:none;}
+.sheet-grid{gap:10px;}
+.sheet-stat{background:var(--green-pale);border-radius:16px;padding:12px;}
+.sheet-stat b{font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:800;line-height:1.3;margin-bottom:3px;}
+.sheet-stat span{font-size:11px;font-weight:600;}
+.sheet h4{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--green-deep);
+  margin:22px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--green-pale);}
+.sheet p{line-height:1.6;}
+html[data-theme=dark] .sheet-illust,html[data-theme=dark] .sheet .cat{background:#1F3A28;}
 </style>
 <script>if("serviceWorker"in navigator){navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(x){x.unregister()})}).catch(function(){});if(window.caches)caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})});}</script></head>
 <body>
