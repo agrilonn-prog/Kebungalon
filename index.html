@@ -1265,6 +1265,28 @@ html[data-theme=dark] .sm-ctx{background:#1F3A28;}
   margin:22px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--green-pale);}
 .sheet p{line-height:1.6;}
 html[data-theme=dark] .sheet-illust,html[data-theme=dark] .sheet .cat{background:#1F3A28;}
+
+/* ===== Penasihat Tanam & Tanya Kebun: adaptif layar ===== */
+.sm{overflow:hidden;}
+.sm-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:end;}
+.sm-row>div{display:flex;flex-direction:column;justify-content:flex-end;min-width:0;}
+.sm-row label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 5px;}
+.sm select{appearance:none;-webkit-appearance:none;height:44px;padding:0 30px 0 12px;font-weight:600;border-radius:12px;
+  background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%2356655A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m1 1.5 5 5 5-5'/%3E%3C/svg%3E") no-repeat right 11px center;
+  text-overflow:ellipsis;}
+.sm input{height:44px;padding:0 12px;border-radius:12px;}
+/* layar sempit: tiap isian jadi satu baris (label kiri, pilihan kanan) */
+@media (max-width:520px){
+  .sm-row{grid-template-columns:1fr;gap:8px;}
+  .sm-row>div{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;
+    background:var(--bg);border-radius:14px;padding:6px 6px 6px 14px;}
+  .sm-row label{margin:0;flex:0 0 40%;font-size:11px;white-space:normal;}
+  .sm-row select{flex:1;min-width:0;background-color:var(--paper);}
+}
+.sm-pick{flex-wrap:wrap;}
+.sm-pick .bd{flex:1 1 150px;}
+@media (max-width:380px){.sm-pick button{margin-left:auto;}.ak-grid{gap:6px;}.ak-q{font-size:10.5px;}}
+html[data-theme=dark] .sm select{background-color:#0F1D14;}
 </style>
 <script>if("serviceWorker"in navigator){navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(x){x.unregister()})}).catch(function(){});if(window.caches)caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})});}</script></head>
 <body>
